@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "47475022299",
+    "firebase_url": "https://hoober1-d3378.firebaseio.com",
+    "project_id": "hoober1-d3378",
+    "storage_bucket": "hoober1-d3378.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47475022299:android:cda3c2e9496474d5",
+        "android_client_info": {
+          "package_name": "hooapps.mac.hoober1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47475022299-66etjdukkduqcpemgf3kqdinnmirojfc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hooapps.mac.hoober1",
+            "certificate_hash": "461FD88905552D60B1370404B5C8F231C2583CED"
+          }
+        },
+        {
+          "client_id": "47475022299-odvmaf4qvhk3ovsi5kr8ktdruu9gh1q8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJPHPDRHPDYSP0koaJduAQU9xWQs9fhjE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47475022299-odvmaf4qvhk3ovsi5kr8ktdruu9gh1q8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

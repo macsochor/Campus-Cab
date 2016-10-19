@@ -15,6 +15,11 @@
     </string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_ride_screen">RideScreen</string>
+    <string-array name="drawer_array">
+        <item>Lorem</item>
+        <item>Ipsum</item>
+        <item>Neque</item>
+    </string-array>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -109,7 +114,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_rides">Rides</string>
     <string name="title_activity_hamburger_test">HamburgerTest</string>
-
+    
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
