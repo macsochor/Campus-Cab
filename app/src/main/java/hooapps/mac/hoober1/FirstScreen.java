@@ -33,7 +33,7 @@ public class FirstScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //gets rid of title bar
+        //gets rid of time bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -128,8 +128,8 @@ public class FirstScreen extends AppCompatActivity {
         public Map<String, Object> toMap() {
             HashMap<String, Object> result = new HashMap<>();
             result.put("uid", uid);
-            result.put("author", author);
-            result.put("title", title);
+            result.put("date", author);
+            result.put("time", title);
             result.put("body", body);
             result.put("starCount", starCount);
             result.put("stars", stars);

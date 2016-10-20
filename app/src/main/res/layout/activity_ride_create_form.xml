@@ -10,41 +10,12 @@
     tools:context="hooapps.mac.hoober1.RideCreateForm">
 
 
-    <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Location: "
-        android:hint="Where Are You Headed?"
-        android:id="@+id/schools_list"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:hint="How Many Seats Are You Offering"
-        android:id="@+id/seatNumInput"
-        android:layout_below="@+id/timeLeavingInput"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="What Date Are You Leaving?"
-        android:id="@+id/dateLeavingInput"
-        android:focusable="false"
-        android:layout_below="@+id/schools_list"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/timeLeavingInput"
         android:layout_below="@+id/dateLeavingInput"
-        android:hint="What Time Are You Leaving"
+        android:hint="What Time Are You Leaving?"
         android:focusable="false"
         android:layout_centerHorizontal="true" />
 
@@ -59,6 +30,46 @@
         android:textSize="35dp"
         android:fontFamily="sans-serif-thin"
         style="?android:attr/borderlessButtonStyle" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:hint="Where Are You Leaving From?"
+        android:id="@+id/originInput"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:hint="Where Are You Going?"
+        android:id="@+id/destInput"
+        android:layout_below="@+id/originInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="What Date Are You Leaving?"
+        android:id="@+id/dateLeavingInput"
+        android:focusable="false"
+        android:layout_below="@+id/destInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:hint="How Many Seats Are You Offering?"
+        android:id="@+id/seatNumInput"
+        android:layout_below="@+id/timeLeavingInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->

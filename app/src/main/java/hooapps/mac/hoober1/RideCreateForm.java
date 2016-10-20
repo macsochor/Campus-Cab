@@ -1,13 +1,19 @@
 package hooapps.mac.hoober1;
 
 import android.app.DatePickerDialog;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +24,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,15 +31,21 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.vision.text.Text;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class RideCreateForm extends AppCompatActivity {
-    EditText dateLeaving;
-    EditText timeLeaving;
-    EditText placeHeading;
+    //views
+    EditText dateLeaving,timeLeaving, destination, numSeats, origin;
     Button submit;
-    TextView tv;
+
+    ArrayList<String> s;
+    CharSequence[] cs;
+    //firebase stuff
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -46,16 +57,16 @@ public class RideCreateForm extends AppCompatActivity {
         setContentView(R.layout.activity_ride_create_form);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, PLACES);
-        AutoCompleteTextView textView = (AutoCompleteTextView)
-                findViewById(R.id.schools_list);
-        textView.setAdapter(adapter);
         dateLeaving = (EditText) findViewById(R.id.dateLeavingInput);
         timeLeaving = (EditText) findViewById(R.id.timeLeavingInput);
+        numSeats = (EditText) findViewById(R.id.seatNumInput);
         submit = (Button) findViewById(R.id.submitButton);
         submit.setBackgroundColor(0xFFFFA500);
         //set dateleaving listener
+        destination = (EditText)findViewById(R.id.destInput);
+        origin = (EditText)findViewById(R.id.originInput);
+
+
         dateLeaving.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -95,13 +106,20 @@ public class RideCreateForm extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                writeNewRide("Mac", destination.getText().toString(),dateLeaving.getText().toString(),
+                        timeLeaving.getText().toString(), Integer.parseInt(numSeats.getText().toString()));
+
                 finish();
             }
 
         });
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         //TODO rename shcools_list
-        placeHeading = (EditText)findViewById(R.id.schools_list);
-        placeHeading.setOnClickListener(new View.OnClickListener() {
+        ;
+        destination.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -113,29 +131,57 @@ public class RideCreateForm extends AppCompatActivity {
                 }
             }
         });
+
+        s = new ArrayList<String>();
+        cs = s.toArray(new CharSequence[s.size()]);
+        origin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(RideCreateForm.this);
+                builder1.setMessage("Choose Departure Location");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                origin.setText(String.valueOf(id));
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                origin.setText(String.valueOf(id));
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+        });
     }
 
-    int PLACE_PICKER_REQUEST = 1;
+    final int PLACE_PICKER_REQUEST = 1;
 
     public void getGeo() throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
         startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST) {
+        if (requestCode == 1 || requestCode == 2) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 String toastMsg = String.format("Place: %s", place.getName());
-                placeHeading.setText(place.getName());
+                destination.setText(place.getName());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
             }
         }
     }
-
-
-
 
 
     Calendar myCalendar = Calendar.getInstance();
@@ -170,6 +216,18 @@ public class RideCreateForm extends AppCompatActivity {
             "Virginia Tech", "James Madison", "Charlottesville"
     };
 
+
+    private void writeNewRide(String userId, String place, String date, String time, int seats) {
+        // Create new ride at /user-rides/$userid/$rideid and at
+        // /rides/$rideid simultaneously
+        String key = mDatabase.child("posts").push().getKey();
+        Ride ride = new Ride(place, date, time, seats);
+        Map<String, Object> rideValues = ride.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/rides/" + key, rideValues);
+        childUpdates.put("/user-rides/" + userId + "/" + key, rideValues);
+
+        mDatabase.updateChildren(childUpdates);
+    }
 }
-
-

@@ -39,10 +39,7 @@
                 android:text="HRHD"
                 android:fontFamily="sans-serif-thin"
                 android:layout_marginTop="62dp"
-
-
-            android:nextFocusForward="@id/email"
-
+                android:nextFocusForward="@+id/email"
                 android:inputType="text"
                 android:textSize="64dp"/>
             <android.support.design.widget.TextInputLayout
