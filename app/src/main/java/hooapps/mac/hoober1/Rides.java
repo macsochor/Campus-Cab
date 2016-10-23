@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class Rides extends AppCompatActivity {
@@ -103,17 +104,83 @@ public class Rides extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ll.removeAllViews();
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (final DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     Ride post = postSnapshot.getValue(Ride.class);
 
-                    RelativeLayout rl = new RelativeLayout(Rides.this);
-                    TextView newtv = new TextView(Rides.this);
-                    newtv.setText("Date " + post.date + "    " + "Time: " + post.time + "     " +
-                            "Seats:" + String.valueOf(post.seats) + "\n");
-                    rl.addView(newtv);
-                    ll.addView(rl);
+                    TextView originTV = new TextView(Rides.this);
+                    originTV.setText(post.origin);
+
+                    TextView destTV = new TextView(Rides.this);
+                    destTV.setText(post.destination);
+
+                    TextView arrowTV = new TextView(Rides.this);
+                    arrowTV.setText("------->");
+
+                    TextView dateTV = new TextView(Rides.this);
+                    dateTV.setText(post.date);
+
+                    TextView timeTV = new TextView(Rides.this);
+                    timeTV.setText(post.time);
+
+                    TextView seatsTV = new TextView(Rides.this);
+                    seatsTV.setText(String.valueOf(post.seats + "\n"));
+
+                    final Button deleteButton = new Button(Rides.this);
+                    deleteButton.setText("Delete");
+                    deleteButton.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            deleteButton.setText(postSnapshot.getRef().toString());
+                            String s = postSnapshot.getRef().toString();
+                            //s = s.substring(s.indexOf("/-"),s.length());
+                            deletePost(s);
+                        }
+
+                    });
+
+//                            + " Destination " + post.destination +
+//                            " Date " + post.date + " Time: " + post.time +
+//                            " Seats:" + String.valueOf(post.seats) + "\n");
+
+                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+                    originTV.setTextSize(20);
+                    destTV.setTextSize(20);
+                    arrowTV.setTextSize(20);
+                    dateTV.setTextSize(20);
+                    timeTV.setTextSize(20);
+                    seatsTV.setTextSize(20);
 
 
+                    destTV.setLayoutParams(param);
+                    originTV.setLayoutParams(param);
+                    arrowTV.setLayoutParams(param);
+                    dateTV.setLayoutParams(param);
+                    timeTV.setLayoutParams(param);
+                    seatsTV.setLayoutParams(param);
+
+                    LinearLayout linloOriginDest = new LinearLayout(Rides.this);
+                    linloOriginDest.setWeightSum(3);
+                    linloOriginDest.setOrientation(LinearLayout.HORIZONTAL);
+                    linloOriginDest.addView(originTV);
+                    linloOriginDest.addView(arrowTV);
+                    linloOriginDest.addView(destTV);
+
+                    ll.addView(linloOriginDest);
+
+
+
+                    LinearLayout linloDateTime = new LinearLayout(Rides.this);
+                    linloDateTime.setWeightSum(4);
+                    linloDateTime.setOrientation(LinearLayout.HORIZONTAL);
+                    linloDateTime.addView(dateTV);
+                    linloDateTime.addView(timeTV);
+                    linloDateTime.addView(seatsTV);
+                    linloDateTime.addView(deleteButton);
+                    ll.addView(linloDateTime);
                 }
             }
 
@@ -127,10 +194,25 @@ public class Rides extends AppCompatActivity {
 
 
     }
+    public void deletePost(final String f) {
+        mPostReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("rides");
+                for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    if (postSnapshot.getRef().toString().equals(f)) {
+                        Log.w("TAG", "loadPost:onCancelled");
+                        postSnapshot.getRef().removeValue();
+                    } else{
+                        Log.w("TAG", f +" " + postSnapshot.getRef().toString());
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-
-
-
-
+            }
+        });
+    }
 }

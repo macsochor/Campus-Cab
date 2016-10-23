@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,11 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirstScreen extends AppCompatActivity {
-    Button signup, login, db;
-    EditText et;
+    Button signup, login, googsignin;
+    GoogleApiClient mGoogleApiClient;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("message");
     private DatabaseReference mDatabase;
+    private static final int RC_SIGN_IN = 9001;
 
 
     @Override
@@ -41,7 +46,6 @@ public class FirstScreen extends AppCompatActivity {
         getSupportActionBar().hide(); //<< this
         setContentView(R.layout.activity_first_screen);
 
-        et = (EditText)findViewById(R.id.editText);
 
         //initialize buttons
         signup = (Button) findViewById(R.id.signUpButton);
@@ -68,90 +72,19 @@ public class FirstScreen extends AppCompatActivity {
         });
         login.setBackgroundColor(0xFF0099CC);
 
-        db = (Button) findViewById(R.id.db);
-        db.setBackgroundColor(0xFFFF00FF);
-        db.setTextColor(Color.BLACK);
-        db.setOnClickListener(new View.OnClickListener() {
+        googsignin = (Button) findViewById(R.id.gSignIn);
+        googsignin.setBackgroundColor(0xFF0CC0FF);
+        googsignin.setTextColor(Color.BLACK);
+        signup.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                // Write a message to the databse
-
-                myRef.setValue(et.getText().toString());
-                writeNewPost(et.getText().toString(), "a", "b", "c");
+//                signIn();
             }
-        });
 
+        });
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //Read from the database
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-
-//                Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-//                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
 
     }
-    @IgnoreExtraProperties
-    public class Post {
-
-        public String uid;
-        public String author;
-        public String title;
-        public String body;
-        public int starCount = 0;
-        public Map<String, Boolean> stars = new HashMap<>();
-
-        public Post() {
-            // Default constructor required for calls to DataSnapshot.getValue(Post.class)
-        }
-
-        public Post(String uid, String author, String title, String body) {
-            this.uid = uid;
-            this.author = author;
-            this.title = title;
-            this.body = body;
-        }
-
-        @Exclude
-        public Map<String, Object> toMap() {
-            HashMap<String, Object> result = new HashMap<>();
-            result.put("uid", uid);
-            result.put("date", author);
-            result.put("time", title);
-            result.put("body", body);
-            result.put("starCount", starCount);
-            result.put("stars", stars);
-
-            return result;
-        }
-
-    }
-
-    private void writeNewPost(String userId, String username, String title, String body) {
-        // Create new post at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
-        String key = mDatabase.child("posts").push().getKey();
-        Post post = new Post(userId, username, title, body);
-        Map<String, Object> postValues = post.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/posts/" + key, postValues);
-        childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
-
-        mDatabase.updateChildren(childUpdates);
-    }
-
-
 }

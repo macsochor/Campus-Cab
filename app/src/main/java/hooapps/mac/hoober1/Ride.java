@@ -13,7 +13,8 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Ride {
 
-    public String place;
+    public String origin;
+    public String destination;
     public String date;
     public String time;
     public int seats;
@@ -22,8 +23,9 @@ public class Ride {
         // Default constructor required for calls to DataSnapshot.getValue(Ride.class)
     }
 
-    public Ride(String place, String date, String time, int seats) {
-        this.place = place;
+    public Ride(String origin, String destinaiton, String date, String time, int seats) {
+        this.origin = origin;
+        this.destination = destinaiton;
         this.date = date;
         this.time = time;
         this.seats = seats;
@@ -32,7 +34,8 @@ public class Ride {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("place", place);
+        result.put("origin", origin);
+        result.put("destination", destination);
         result.put("date", date);
         result.put("time", time);
         result.put("seats", seats);

@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +25,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -106,7 +109,7 @@ public class RideCreateForm extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                writeNewRide("Mac", destination.getText().toString(),dateLeaving.getText().toString(),
+                writeNewRide("Mac", origin.getText().toString(), destination.getText().toString(),dateLeaving.getText().toString(),
                         timeLeaving.getText().toString(), Integer.parseInt(numSeats.getText().toString()));
 
                 finish();
@@ -116,53 +119,22 @@ public class RideCreateForm extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-        //TODO rename shcools_list
-        ;
-        destination.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    getGeo();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        destination.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    getGeo();
+//                } catch (GooglePlayServicesNotAvailableException e) {
+//                    e.printStackTrace();
+//                } catch (GooglePlayServicesRepairableException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
         s = new ArrayList<String>();
         cs = s.toArray(new CharSequence[s.size()]);
-        origin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(RideCreateForm.this);
-                builder1.setMessage("Choose Departure Location");
-                builder1.setCancelable(true);
 
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                origin.setText(String.valueOf(id));
-                                dialog.cancel();
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                origin.setText(String.valueOf(id));
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-        });
     }
 
     final int PLACE_PICKER_REQUEST = 1;
@@ -211,17 +183,12 @@ public class RideCreateForm extends AppCompatActivity {
         dateLeaving.setText(sdf.format(myCalendar.getTime()));
     }
 
-
-    private static final String[] PLACES = new String[]{
-            "Virginia Tech", "James Madison", "Charlottesville"
-    };
-
-
-    private void writeNewRide(String userId, String place, String date, String time, int seats) {
+    private void writeNewRide(String userId, String origin, String destination, String date, String time, int seats) {
         // Create new ride at /user-rides/$userid/$rideid and at
         // /rides/$rideid simultaneously
+
         String key = mDatabase.child("posts").push().getKey();
-        Ride ride = new Ride(place, date, time, seats);
+        Ride ride = new Ride(origin, destination, date, time, seats);
         Map<String, Object> rideValues = ride.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();

@@ -8,42 +8,17 @@
     tools:context="hooapps.mac.hoober1.FirstScreen">
 
 
-    <Button
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="LOGIN"
-        android:id="@+id/loginButton"
-        android:drawable="@android:color/black"
-        android:textSize="35dp"
-        android:fontFamily="sans-serif-thin"
-        android:layout_above="@+id/signUpButton"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="HRHD"
-        android:id="@+id/textView"
+        android:text="You2U"
+        android:id="@+id/textView2"
         android:layout_marginTop="64dp"
         android:textSize="64dp"
         android:fontFamily="sans-serif-thin"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-
-    <Button
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="DATABASE"
-        android:id="@+id/db"
-        android:drawable="@android:color/black"
-        android:textSize="35dp"
-        android:fontFamily="sans-serif-thin"
-        android:layout_above="@+id/loginButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="match_parent"
@@ -58,14 +33,41 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Hello, DB!"
-        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Taking You To University"
+        android:id="@+id/textView"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif-thin"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:id="@+id/loginButton"
+        android:drawable="@android:color/black"
+        android:textSize="35dp"
+        android:fontFamily="sans-serif-thin"
+        android:layout_above="@+id/signUpButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GOOGLE SIGN IN"
+        android:id="@+id/gSignIn"
+        android:drawable="@android:color/black"
+        android:textSize="35dp"
+        android:fontFamily="sans-serif-thin"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/editText" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     />
 </RelativeLayout>
