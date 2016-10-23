@@ -194,7 +194,7 @@ public class Rides extends AppCompatActivity {
 
 
     }
-    public void deletePost(final String f) {
+     public void deletePost(final String f) {
         mPostReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
