@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class Rides extends AppCompatActivity {
+public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private String[] mPlanetTitles;
     private DrawerLayout mDrawerLayout;
@@ -41,6 +47,7 @@ public class Rides extends AppCompatActivity {
 
     //firebase stuff
     private DatabaseReference mPostReference;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -58,15 +65,36 @@ public class Rides extends AppCompatActivity {
 //        tv1 = (TextView)findViewById(R.id.textView1);
 //        tv2 = (TextView)findViewById(R.id.textView2);
 
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
+
+
         mPostReference = FirebaseDatabase.getInstance().getReference().child("rides");
         ll = (LinearLayout)findViewById(R.id.linlay);
 
         settings = (Button) findViewById(R.id.settingsButton);
         settings.setBackgroundColor(0xFFFFA500);
         settings.setTextColor(Color.BLACK);
+
         filter = (Button) findViewById(R.id.filterButton);
         filter.setBackgroundColor(0xFFFFA500);
         filter.setTextColor(Color.BLACK);
+        filter.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(Rides.this, "Signed out", Toast.LENGTH_SHORT).show();
+
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                startActivity(new Intent(Rides.this, SignInActivity.class));
+
+
+            }
+
+        });
         newRide = (Button) findViewById(R.id.newButton);
         newRide.setBackgroundColor(0xFFFFA500);
         newRide.setTextColor(Color.BLACK);
@@ -131,7 +159,7 @@ public class Rides extends AppCompatActivity {
 
                         @Override
                         public void onClick(View v) {
-                            deleteButton.setText(postSnapshot.getRef().toString());
+                            //deleteButton.setText(postSnapshot.getRef().toString());
                             String s = postSnapshot.getRef().toString();
                             //s = s.substring(s.indexOf("/-"),s.length());
                             deletePost(s);
@@ -168,7 +196,6 @@ public class Rides extends AppCompatActivity {
                     linloOriginDest.addView(originTV);
                     linloOriginDest.addView(arrowTV);
                     linloOriginDest.addView(destTV);
-
                     ll.addView(linloOriginDest);
 
 
@@ -191,8 +218,6 @@ public class Rides extends AppCompatActivity {
                 // ...
             }
         });
-
-
     }
      public void deletePost(final String f) {
         mPostReference.addValueEventListener(new ValueEventListener() {
@@ -214,5 +239,9 @@ public class Rides extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("Bad", "onConnectionFailed:" + connectionResult);
     }
 }

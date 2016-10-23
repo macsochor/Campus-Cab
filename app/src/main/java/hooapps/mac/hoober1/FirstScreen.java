@@ -75,13 +75,20 @@ public class FirstScreen extends AppCompatActivity {
         googsignin = (Button) findViewById(R.id.gSignIn);
         googsignin.setBackgroundColor(0xFF0CC0FF);
         googsignin.setTextColor(Color.BLACK);
-        signup.setOnClickListener(new View.OnClickListener() {
+        googsignin.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                signIn();
+                Intent intent = new Intent(FirstScreen.this, SignInActivity.class);
+                FirstScreen.this.startActivity(intent);
             }
 
+        });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

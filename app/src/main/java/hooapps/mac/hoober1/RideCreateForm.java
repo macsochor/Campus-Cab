@@ -34,6 +34,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,6 +50,9 @@ public class RideCreateForm extends AppCompatActivity {
     //firebase stuff
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference mDatabase;
+    private FirebaseUser mFirebaseUser;
+    private FirebaseAuth mFirebaseAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,11 +110,14 @@ public class RideCreateForm extends AppCompatActivity {
 
         });
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
         submit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                writeNewRide("Mac", origin.getText().toString(), destination.getText().toString(),dateLeaving.getText().toString(),
+                writeNewRide(mFirebaseUser.getDisplayName(), origin.getText().toString(), destination.getText().toString(),dateLeaving.getText().toString(),
                         timeLeaving.getText().toString(), Integer.parseInt(numSeats.getText().toString()));
 
                 finish();
