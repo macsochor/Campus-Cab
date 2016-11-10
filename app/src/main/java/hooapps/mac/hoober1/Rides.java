@@ -41,6 +41,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private String[] mPlanetTitles;
@@ -118,11 +120,11 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(Rides.this);
-                builder1.setMessage("What do you need?");
+                builder1.setMessage("I am...");
                 builder1.setCancelable(true);
 
                 builder1.setPositiveButton(
-                        "A ride",
+                        "A passenger",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -133,7 +135,7 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                         });
 
                 builder1.setNegativeButton(
-                        "Passengers",
+                        "A driver",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -179,13 +181,13 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     Ride post = postSnapshot.getValue(Ride.class);
 
                     TextView originTV = new TextView(Rides.this);
-                    originTV.setText(post.origin + "\n" + post.date);
+                    originTV.setText(post.origin + "\nTo\n" + post.destination);
 
                     TextView destTV = new TextView(Rides.this);
-                    destTV.setText(post.destination);
+                    destTV.setText("To\n"+post.destination);
 
                     TextView arrowTV = new TextView(Rides.this);
-                    arrowTV.setText("------->\n" + post.time);
+                    arrowTV.setText(post.date + "\n" + post.time);
 
                     TextView dateTV = new TextView(Rides.this);
                     dateTV.setText(post.date);
@@ -204,9 +206,28 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                         d = getResources().getDrawable(R.drawable.carclip);
                     }
                     isPassTV.setImageDrawable(d);
-                    LinearLayout.LayoutParams layoutSizeParams = new LinearLayout.LayoutParams(200, 175);
+                    LinearLayout.LayoutParams layoutSizeParams = new LinearLayout.LayoutParams(300, 275);
+
                     isPassTV.setLayoutParams(layoutSizeParams);
 
+                    TextView timeDiffTV = new TextView(Rides.this);
+                    Calendar c = Calendar.getInstance();
+                    long diff = c.getTimeInMillis() - Long.valueOf(post.timeCreated);
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    String age = "";
+                    if(days > 0){
+                        age += days + "d";
+                    } else if(hours > 0){
+                        age += hours + "h";
+                    } else if(minutes > 0){
+                        age += minutes + "m";
+                    } else {
+                        age += "just now";
+                    }
+                    timeDiffTV.setText(age);
 
                     final Button deleteButton = (Button) getLayoutInflater().inflate(R.layout.custombutton, null);
                     //deleteButton.setText("Hello world");
@@ -241,6 +262,9 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     dateTV.setTextSize(15);
                     timeTV.setTextSize(15);
                     seatsTV.setTextSize(15);
+                    timeDiffTV.setTextSize(10);
+
+                    timeDiffTV.setTextColor(Color.GRAY);
 
 
                     destTV.setLayoutParams(param);
@@ -255,9 +279,10 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     linloOriginDest.setOrientation(LinearLayout.HORIZONTAL);
                     linloOriginDest.addView(isPassTV);
                     linloOriginDest.addView(originTV);
+                    //linloOriginDest.addView(destTV);
                     linloOriginDest.addView(arrowTV);
-                    linloOriginDest.addView(destTV);
                     linloOriginDest.addView(deleteButton);
+                    linloOriginDest.addView(timeDiffTV);
                     ll.addView(linloOriginDest);
 
 

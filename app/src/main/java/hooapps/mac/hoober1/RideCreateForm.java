@@ -2,8 +2,10 @@ package hooapps.mac.hoober1;
 
 import android.app.DatePickerDialog;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -92,18 +94,21 @@ public class RideCreateForm extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                  Calendar mcurrentTime = Calendar.getInstance();
                  int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                  int minute = mcurrentTime.get(Calendar.MINUTE);
                  TimePickerDialog mTimePicker;
+
                  mTimePicker = new TimePickerDialog(RideCreateForm.this, new TimePickerDialog.OnTimeSetListener() {
                      @Override
                      public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                         timeLeaving.setText( selectedHour + ":" + selectedMinute);
+                         String ampm = "PM";
+                         if(selectedHour < 12) ampm = "AM";
+                         timeLeaving.setText( selectedHour + ":" + selectedMinute + " " + ampm);
                      }
-                 }, hour, minute, true);//Yes 24 hour time
+                 }, hour, minute, false);//Yes 24 hour time
                  mTimePicker.setTitle("Select Time");
+
                  mTimePicker.show();
 
              }
@@ -197,11 +202,14 @@ public class RideCreateForm extends AppCompatActivity {
     private void writeNewRide(String userId, String origin, String destination, String date, String time, int seats, boolean isPassenger) {
         // Create new ride at /user-rides/$userid/$rideid and at
         // /rides/$rideid simultaneously
-
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(c.getTime());
         String key = mDatabase.child("posts").push().getKey();
-        Ride ride = new Ride(origin, destination, date, time, seats, isPassenger);
-        Map<String, Object> rideValues = ride.toMap();
+        Ride ride = new Ride(origin, destination, date, time, seats, isPassenger,
+                String.valueOf(c.getTimeInMillis()));
 
+        Map<String, Object> rideValues = ride.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/rides/" + key, rideValues);
         //childUpdates.put("/user-rides/" + userId + "/" + key, rideValues);
