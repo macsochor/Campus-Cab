@@ -91,7 +91,5 @@ public class FirstScreen extends AppCompatActivity {
             }
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-
     }
 }

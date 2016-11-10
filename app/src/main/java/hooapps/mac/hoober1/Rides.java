@@ -1,8 +1,11 @@
 package hooapps.mac.hoober1;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,12 +16,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -74,9 +79,19 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
         mPostReference = FirebaseDatabase.getInstance().getReference().child("rides");
         ll = (LinearLayout)findViewById(R.id.linlay);
 
+
         settings = (Button) findViewById(R.id.settingsButton);
         settings.setBackgroundColor(0xFFFFA500);
         settings.setTextColor(Color.BLACK);
+        settings.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+            }
+
+        });
+
 
         filter = (Button) findViewById(R.id.filterButton);
         filter.setBackgroundColor(0xFFFFA500);
@@ -102,8 +117,36 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Rides.this, RideCreateForm.class);
-                Rides.this.startActivity(intent);
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(Rides.this);
+                builder1.setMessage("What do you need?");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "A ride",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Intent intent = new Intent(Rides.this, RideCreateForm.class);
+                                intent.putExtra("isPassenger", true);
+                                Rides.this.startActivity(intent);
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "Passengers",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Intent intent = new Intent(Rides.this, RideCreateForm.class);
+                                intent.putExtra("isPassenger", false);
+                                Rides.this.startActivity(intent);
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
+
             }
 
         });
@@ -136,13 +179,13 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     Ride post = postSnapshot.getValue(Ride.class);
 
                     TextView originTV = new TextView(Rides.this);
-                    originTV.setText(post.origin);
+                    originTV.setText(post.origin + "\n" + post.date);
 
                     TextView destTV = new TextView(Rides.this);
                     destTV.setText(post.destination);
 
                     TextView arrowTV = new TextView(Rides.this);
-                    arrowTV.setText("------->");
+                    arrowTV.setText("------->\n" + post.time);
 
                     TextView dateTV = new TextView(Rides.this);
                     dateTV.setText(post.date);
@@ -153,8 +196,25 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     TextView seatsTV = new TextView(Rides.this);
                     seatsTV.setText(String.valueOf(post.seats + "\n"));
 
-                    final Button deleteButton = new Button(Rides.this);
+                    ImageView isPassTV = new ImageView(Rides.this);
+                    Drawable d;
+                    if(post.isPassenger) {
+                        d = getResources().getDrawable(R.drawable.manclip);
+                    } else {
+                        d = getResources().getDrawable(R.drawable.carclip);
+                    }
+                    isPassTV.setImageDrawable(d);
+                    LinearLayout.LayoutParams layoutSizeParams = new LinearLayout.LayoutParams(200, 175);
+                    isPassTV.setLayoutParams(layoutSizeParams);
+
+
+                    final Button deleteButton = (Button) getLayoutInflater().inflate(R.layout.custombutton, null);
+                    //deleteButton.setText("Hello world");
+                    //final Button deleteButton = new Button(Rides.this);
                     deleteButton.setText("Delete");
+                    deleteButton.setLayoutParams(new LinearLayout.LayoutParams(200, 120));
+
+
                     deleteButton.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -174,13 +234,13 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-
-                    originTV.setTextSize(20);
-                    destTV.setTextSize(20);
-                    arrowTV.setTextSize(20);
-                    dateTV.setTextSize(20);
-                    timeTV.setTextSize(20);
-                    seatsTV.setTextSize(20);
+                    param.gravity = Gravity.RIGHT;
+                    originTV.setTextSize(15);
+                    destTV.setTextSize(15);
+                    arrowTV.setTextSize(15);
+                    dateTV.setTextSize(15);
+                    timeTV.setTextSize(15);
+                    seatsTV.setTextSize(15);
 
 
                     destTV.setLayoutParams(param);
@@ -191,11 +251,13 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     seatsTV.setLayoutParams(param);
 
                     LinearLayout linloOriginDest = new LinearLayout(Rides.this);
-                    linloOriginDest.setWeightSum(3);
+                    linloOriginDest.setWeightSum(5);
                     linloOriginDest.setOrientation(LinearLayout.HORIZONTAL);
+                    linloOriginDest.addView(isPassTV);
                     linloOriginDest.addView(originTV);
                     linloOriginDest.addView(arrowTV);
                     linloOriginDest.addView(destTV);
+                    linloOriginDest.addView(deleteButton);
                     ll.addView(linloOriginDest);
 
 
@@ -205,9 +267,9 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     linloDateTime.setOrientation(LinearLayout.HORIZONTAL);
                     linloDateTime.addView(dateTV);
                     linloDateTime.addView(timeTV);
-                    linloDateTime.addView(seatsTV);
-                    linloDateTime.addView(deleteButton);
-                    ll.addView(linloDateTime);
+//                    linloDateTime.addView(isPassTV);
+//                    linloDateTime.addView(deleteButton);
+//                    ll.addView(linloDateTime);
                 }
             }
 

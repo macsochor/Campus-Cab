@@ -112,13 +112,16 @@ public class RideCreateForm extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        final Intent intent = getIntent();
+
 
         submit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                writeNewRide(mFirebaseUser.getDisplayName(), origin.getText().toString(), destination.getText().toString(),dateLeaving.getText().toString(),
-                        timeLeaving.getText().toString(), Integer.parseInt(numSeats.getText().toString()));
+                writeNewRide(mFirebaseUser.getDisplayName(), origin.getText().toString(), destination.getText().toString(),
+                        dateLeaving.getText().toString(),timeLeaving.getText().toString(),
+                        Integer.parseInt(numSeats.getText().toString()), intent.getBooleanExtra("isPassenger", true));
 
                 finish();
             }
@@ -191,17 +194,17 @@ public class RideCreateForm extends AppCompatActivity {
         dateLeaving.setText(sdf.format(myCalendar.getTime()));
     }
 
-    private void writeNewRide(String userId, String origin, String destination, String date, String time, int seats) {
+    private void writeNewRide(String userId, String origin, String destination, String date, String time, int seats, boolean isPassenger) {
         // Create new ride at /user-rides/$userid/$rideid and at
         // /rides/$rideid simultaneously
 
         String key = mDatabase.child("posts").push().getKey();
-        Ride ride = new Ride(origin, destination, date, time, seats);
+        Ride ride = new Ride(origin, destination, date, time, seats, isPassenger);
         Map<String, Object> rideValues = ride.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/rides/" + key, rideValues);
-        childUpdates.put("/user-rides/" + userId + "/" + key, rideValues);
+        //childUpdates.put("/user-rides/" + userId + "/" + key, rideValues);
 
         mDatabase.updateChildren(childUpdates);
     }

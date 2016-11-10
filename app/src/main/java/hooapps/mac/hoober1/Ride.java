@@ -18,17 +18,19 @@ public class Ride {
     public String date;
     public String time;
     public int seats;
+    public boolean isPassenger;
 
     public Ride() {
         // Default constructor required for calls to DataSnapshot.getValue(Ride.class)
     }
 
-    public Ride(String origin, String destinaiton, String date, String time, int seats) {
+    public Ride(String origin, String destinaiton, String date, String time, int seats, boolean isPassenger) {
         this.origin = origin;
         this.destination = destinaiton;
         this.date = date;
         this.time = time;
         this.seats = seats;
+        this.isPassenger = isPassenger;
     }
 
     @Exclude
@@ -39,7 +41,7 @@ public class Ride {
         result.put("date", date);
         result.put("time", time);
         result.put("seats", seats);
-
+        result.put("isPassenger", isPassenger);
         return result;
     }
 
