@@ -114,6 +114,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_rides">Rides</string>
     <string name="title_activity_hamburger_test">HamburgerTest</string>
+    <string name="banner_ad_unit_id">ca-app-pub-8060765523787614/1076515284</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

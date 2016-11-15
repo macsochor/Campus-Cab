@@ -44,6 +44,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -87,12 +88,6 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             }
 
         });
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
 //        // Assign fields
@@ -109,9 +104,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
         // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance();
+
     }
 
     private void handleFirebaseAuthResult(AuthResult authResult) {
@@ -151,7 +146,14 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthWithGoogle(account);
+                if(account.getEmail().contains(".edu")){
+                    firebaseAuthWithGoogle(account);
+
+                } else {
+                    mGoogleApiClient.clearDefaultAccountAndReconnect();
+                    Toast.makeText(SignInActivity.this, "Authentication failed. .edu account required",
+                            Toast.LENGTH_SHORT).show();
+                }
             } else {
                 // Google Sign In failed
                 Log.e(TAG, "Google Sign In failed.");

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,10 +16,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,10 +33,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,11 +57,15 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
     private ListView mDrawerList;
     private LinearLayout ll;
     private TextView tv1, tv2;
+    private int height, width;
+    static int id = 1;
 
 
     //firebase stuff
     private DatabaseReference mPostReference;
     private GoogleApiClient mGoogleApiClient;
+    private FirebaseUser mFirebaseUser;
+    private FirebaseAuth mFirebaseAuth;
 
 
     @Override
@@ -66,16 +77,34 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rides);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-//
-//        tv1 = (TextView)findViewById(R.id.textView1);
-//        tv2 = (TextView)findViewById(R.id.textView2);
 
+        //authentication
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
+        //ad money
+        MobileAds.initialize(this, "ca-app-pub-8060765523787614/1076515284");
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                .addTestDevice("FF1783FC6F9F734348C61A6F1F5B3C8B")  // An example device ID
+                .build();
+        mAdView.loadAd(adRequest);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DisplayMetrics metrics = Rides.this.getResources().getDisplayMetrics();
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+
+        //24a4021a6a848a3c
 
 
         mPostReference = FirebaseDatabase.getInstance().getReference().child("rides");
@@ -99,15 +128,9 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
         filter.setBackgroundColor(0xFFFFA500);
         filter.setTextColor(Color.BLACK);
         filter.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(Rides.this, "Signed out", Toast.LENGTH_SHORT).show();
-
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                startActivity(new Intent(Rides.this, SignInActivity.class));
-
+                signOut();
 
             }
 
@@ -171,7 +194,6 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
         };
         mPostReference.addValueEventListener(postListener);
 
-
         // My top posts by number of stars
         mPostReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -205,6 +227,7 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     } else {
                         d = getResources().getDrawable(R.drawable.carclip);
                     }
+
                     isPassTV.setImageDrawable(d);
                     LinearLayout.LayoutParams layoutSizeParams = new LinearLayout.LayoutParams(300, 275);
 
@@ -238,24 +261,57 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                     deleteButton.setOnClickListener(new View.OnClickListener() {
 
+
                         @Override
                         public void onClick(View v) {
-                            //deleteButton.setText(postSnapshot.getRef().toString());
-                            String s = postSnapshot.getRef().toString();
-                            //s = s.substring(s.indexOf("/-"),s.length());
-                            deletePost(s);
-                        }
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(Rides.this);
+                            builder1.setMessage("Are you sure you want to delete this ride?");
+                            builder1.setCancelable(true);
 
+                            builder1.setPositiveButton(
+                                    "Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+
+                                        }
+                                    });
+
+                            builder1.setNegativeButton(
+                                    "Delete",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            String s = postSnapshot.getRef().toString();
+                                            //s = s.substring(s.indexOf("/-"),s.length());
+                                            deletePost(s);
+                                        }
+                                    });
+
+                            AlertDialog alert11 = builder1.create();
+                            alert11.show();
+                        }
                     });
 
-//                            + " Destination " + post.destination +
-//                            " Date " + post.date + " Time: " + post.time +
-//                            " Seats:" + String.valueOf(post.seats) + "\n");
+                    RelativeLayout rellay = new RelativeLayout(Rides.this);
+                    TextView tv = new TextView(Rides.this);
+
+                    RelativeLayout.LayoutParams rlparams = new RelativeLayout.LayoutParams(width/5, height/20);
+                    rlparams.setMargins(0,0,0,0);
+                    rlparams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    //rellay.addView(timeDiffTV, rlparams);
+                    rellay.addView(deleteButton, rlparams);
+                    RelativeLayout.LayoutParams timeparams = new RelativeLayout.LayoutParams(width/10, height/20);
+                    //timeparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    deleteButton.setId(id++);
+                    timeparams.addRule(RelativeLayout.BELOW, id-1);
+                    timeparams.addRule(RelativeLayout.ALIGN_LEFT, id-1);
+                    rellay.addView(timeDiffTV, timeparams);
+
 
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-                    param.gravity = Gravity.RIGHT;
+                            width/4, height/10, 1.0f);
+                    param.gravity = Gravity.CENTER_HORIZONTAL;
+
                     originTV.setTextSize(15);
                     destTV.setTextSize(15);
                     arrowTV.setTextSize(15);
@@ -273,6 +329,7 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     dateTV.setLayoutParams(param);
                     timeTV.setLayoutParams(param);
                     seatsTV.setLayoutParams(param);
+                    rellay.setLayoutParams(param);
 
                     LinearLayout linloOriginDest = new LinearLayout(Rides.this);
                     linloOriginDest.setWeightSum(5);
@@ -281,8 +338,11 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     linloOriginDest.addView(originTV);
                     //linloOriginDest.addView(destTV);
                     linloOriginDest.addView(arrowTV);
-                    linloOriginDest.addView(deleteButton);
-                    linloOriginDest.addView(timeDiffTV);
+
+                    linloOriginDest.addView(rellay);
+
+//                    linloOriginDest.addView(timeDiffTV);
+
                     ll.addView(linloOriginDest);
 
 
@@ -306,6 +366,7 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
             }
         });
     }
+
      public void deletePost(final String f) {
         mPostReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -330,5 +391,14 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d("Bad", "onConnectionFailed:" + connectionResult);
+    }
+
+    public void signOut(){
+        FirebaseAuth.getInstance().signOut();
+        Toast.makeText(Rides.this, "Signed out", Toast.LENGTH_SHORT).show();
+
+        if(mGoogleApiClient.isConnected())Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+        startActivity(new Intent(Rides.this, SignInActivity.class));
+
     }
 }

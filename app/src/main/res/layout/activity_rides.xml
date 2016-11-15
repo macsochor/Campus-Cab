@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,75 +11,73 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="0dp">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="Settings"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-thin"
-
-            android:id="@+id/settingsButton" />
-            <!--android:layout_weight="2" -->
-
-
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-thin"
-            android:layout_weight="1"
-            android:text="New"
-            android:id="@+id/newButton" />
-
-
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-
-            android:fontFamily="sans-serif-thin"
-            android:text="Filter"
-            android:id="@+id/filterButton" />
-
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/linlay">
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_height="wrap_content">
 
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Settings"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-thin"
+
+                android:id="@+id/settingsButton" />
+                <!--android:layout_weight="2" -->
+
+
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-thin"
+                android:layout_weight="1"
+                android:text="New"
+                android:id="@+id/newButton" />
+
+
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:fontFamily="sans-serif-thin"
+                android:text="Filter"
+                android:id="@+id/filterButton" />
         </LinearLayout>
-    </ScrollView>
 
-    <android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!-- The main content view -->
-        <FrameLayout
-            android:id="@+id/content_frame"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <!-- The navigation drawer -->
-        <ListView android:id="@+id/left_drawer"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:background="#111"/>
-    </android.support.v4.widget.DrawerLayout>
+            android:layout_height="match_parent">
 
-</LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linlay">
+
+            </LinearLayout>
+
+
+        </ScrollView>
+    </LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>

@@ -10,14 +10,14 @@
 
     tools:context="hooapps.mac.hoober1.RideCreateForm">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/timeLeavingInput"
-        android:layout_below="@+id/dateLeavingInput"
-        android:hint="What Time Are You Leaving?"
-        android:focusable="false"
-        android:layout_centerHorizontal="true" />
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/timeLeavingInput"-->
+        <!--android:layout_below="@+id/dateLeavingInput"-->
+        <!--android:hint="What Time Are You Leaving?"-->
+        <!--android:focusable="false"-->
+        <!--android:layout_centerHorizontal="true" />-->
 
     <Button
         android:id="@+id/submitButton"
@@ -64,10 +64,10 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned"
         android:hint="How Many Seats Are You Offering?"
         android:id="@+id/seatNumInput"
-        android:layout_below="@+id/timeLeavingInput"
+        android:focusable="false"
+        android:layout_below="@+id/dateLeavingInput"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
