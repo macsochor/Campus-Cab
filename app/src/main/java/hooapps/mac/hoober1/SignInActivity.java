@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -36,7 +37,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private static final int RC_SIGN_IN = 9001;
     private SignInButton mSignInButton;
 
-    private Button signup, login, googsignin;
+    private Button googsignin;
 
 
     private GoogleApiClient mGoogleApiClient;
@@ -53,48 +54,55 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         getSupportActionBar().hide(); //hide action bar
         setContentView(R.layout.activity_first_screen);
 
-        signup = (Button) findViewById(R.id.signUpButton);
-        signup.setBackgroundColor(0xFF00FF00);
-        signup.setTextColor(Color.BLACK);
-        signup.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignInActivity.this, HamburgerTest.class);
-                SignInActivity.this.startActivity(intent);
-            }
-
-        });
-        login = (Button) findViewById(R.id.loginButton);
-        login.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignInActivity.this, Rides.class);
-                SignInActivity.this.startActivity(intent);
-            }
-
-        });
-        login.setBackgroundColor(0xFF0099CC);
-
-        googsignin = (Button) findViewById(R.id.gSignIn);
-        googsignin.setBackgroundColor(0xFF0CC0FF);
-        googsignin.setTextColor(Color.BLACK);
-        googsignin.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-
-        });
-
-
+//        signup = (Button) findViewById(R.id.signUpButton);
+//        signup.setBackgroundColor(0xFF00FF00);
+//        signup.setTextColor(Color.BLACK);
+//        signup.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SignInActivity.this, HamburgerTest.class);
+//                SignInActivity.this.startActivity(intent);
+//            }
+//
+//        });
+//        login = (Button) findViewById(R.id.loginButton);
+//        login.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SignInActivity.this, Rides.class);
+//                SignInActivity.this.startActivity(intent);
+//            }
+//
+//        });
+//
+//
+//        googsignin = (Button) findViewById(R.id.gSignIn);
+//        googsignin.setBackgroundColor(0xFFFFA500);
+//        googsignin.setTextColor(Color.BLACK);
+//        googsignin.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                signIn();
+//            }
+//
+//        });
+//
+//
 //        // Assign fields
 //        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
 //
 //        // Set click listeners
 //        mSignInButton.setOnClickListener(this);
+        RelativeLayout rl = (RelativeLayout)findViewById(R.id.rellay);
+        rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -146,12 +154,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
-                if(account.getEmail().contains(".edu")){
+                if(account.getEmail().substring(account.getEmail().length()-4).equals(".edu")){
                     firebaseAuthWithGoogle(account);
 
                 } else {
                     mGoogleApiClient.clearDefaultAccountAndReconnect();
-                    Toast.makeText(SignInActivity.this, "Authentication failed. .edu account required",
+                    Toast.makeText(SignInActivity.this, "Authentication failed: .edu email required",
                             Toast.LENGTH_SHORT).show();
                 }
             } else {

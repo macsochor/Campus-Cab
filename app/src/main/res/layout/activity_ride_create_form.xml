@@ -37,6 +37,7 @@
         android:inputType="none"
         android:hint="Where Are You Leaving From?"
         android:id="@+id/originInput"
+        android:maxLength="20"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:inputType="none"
         android:hint="Where Are You Going?"
+        android:maxLength="20"
         android:id="@+id/destInput"
         android:layout_below="@+id/originInput"
         android:layout_alignParentLeft="true"

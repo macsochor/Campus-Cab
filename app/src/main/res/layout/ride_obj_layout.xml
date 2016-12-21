@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="100dp">
+
+    <TextView
+        android:text="Just Now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:textColor="#AFAFAF"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/ageTV" />
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:id="@+id/iconIV"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_light"
+        android:cropToPadding="false"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:text="to"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/originTV"
+        android:layout_toRightOf="@+id/originTV"
+        android:layout_toEndOf="@+id/originTV"
+        android:id="@+id/toTV" />
+
+    <TextView
+        android:text="on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textSize="15dp"
+        android:id="@+id/onTV"
+        android:layout_below="@+id/originTV"
+        android:layout_toRightOf="@+id/iconIV"
+        android:layout_toEndOf="@+id/iconIV" />
+
+    <TextView
+        android:text="01/18/97"
+        android:textColor="#000"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/onTV"
+        android:layout_toRightOf="@+id/onTV"
+        android:layout_toEndOf="@+id/onTV"
+        android:id="@+id/dateTV" />
+
+    <TextView
+        android:text="at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/dateTV"
+        android:layout_toRightOf="@+id/dateTV"
+        android:layout_toEndOf="@+id/dateTV"
+        android:layout_marginRight="5dp"
+        android:textSize="15dp"
+        android:id="@+id/atTV" />
+
+    <TextView
+        android:text="Blacksburg"
+        android:layout_width="wrap_content"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:layout_height="wrap_content"
+        android:id="@+id/destinationTV"
+        android:layout_alignBaseline="@+id/toTV"
+        android:layout_alignBottom="@+id/toTV"
+        android:layout_toRightOf="@+id/toTV"
+        android:layout_toEndOf="@+id/toTV" />
+
+    <TextView
+        android:text="4:20 PM"
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:id="@+id/timeTV"
+        android:layout_alignBaseline="@+id/atTV"
+        android:layout_alignBottom="@+id/atTV"
+        android:layout_toRightOf="@+id/atTV"
+        android:layout_toEndOf="@+id/atTV" />
+
+    <TextView
+        android:text="Charlottesville"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:id="@+id/originTV"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/iconIV"
+        android:layout_toEndOf="@+id/iconIV" />
+
+
+</RelativeLayout>

@@ -181,8 +181,8 @@ public class RideCreateForm extends AppCompatActivity {
                 } else {
                     writeNewRide(mFirebaseUser.getDisplayName(),
                             origin.getText().toString(), destination.getText().toString(),
-
-                            datestr, min + ":" + hr + " " + ampm, numberOfSeats, isPass);
+                            datestr, FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+                            min + ":" + hr + " " + ampm, numberOfSeats, isPass);
                     finish();
                 }
             }
@@ -262,14 +262,14 @@ public class RideCreateForm extends AppCompatActivity {
 
     }
 
-    private void writeNewRide(String userId, String origin, String destination, String date, String time, int seats, boolean isPassenger) {
+    private void writeNewRide(String userId, String origin, String destination, String date, String time, String author, int seats, boolean isPassenger) {
         // Create new ride at /user-rides/$userid/$rideid and at
         // /rides/$rideid simultaneously
         Calendar c = Calendar.getInstance();
 //        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        String formattedDate = df.format(c.getTime());
-        String key = mDatabase.child("posts").push().getKey();
-        Ride ride = new Ride(origin, destination, date, time, seats, isPassenger,
+        String key = mDatabase.child("rides").push().getKey();
+        Ride ride = new Ride(origin, destination, date, time, author, seats , isPassenger,
                 String.valueOf(c.getTimeInMillis()));
 
         Map<String, Object> rideValues = ride.toMap();

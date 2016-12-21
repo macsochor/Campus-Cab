@@ -48,48 +48,48 @@ public class FirstScreen extends AppCompatActivity {
 
 
         //initialize buttons
-        signup = (Button) findViewById(R.id.signUpButton);
-        signup.setBackgroundColor(0xFF00FF00);
-        signup.setTextColor(Color.BLACK);
-        signup.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FirstScreen.this, HamburgerTest.class);
-                FirstScreen.this.startActivity(intent);
-            }
-
-        });
-        login = (Button) findViewById(R.id.loginButton);
-        login.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FirstScreen.this, Rides.class);
-                FirstScreen.this.startActivity(intent);
-            }
-
-        });
-        login.setBackgroundColor(0xFF0099CC);
-
-        googsignin = (Button) findViewById(R.id.gSignIn);
-        googsignin.setBackgroundColor(0xFF0CC0FF);
-        googsignin.setTextColor(Color.BLACK);
-        googsignin.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FirstScreen.this, SignInActivity.class);
-                FirstScreen.this.startActivity(intent);
-            }
-
-        });
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        signup = (Button) findViewById(R.id.signUpButton);
+//        signup.setBackgroundColor(0xFF00FF00);
+//        signup.setTextColor(Color.BLACK);
+//        signup.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(FirstScreen.this, HamburgerTest.class);
+//                FirstScreen.this.startActivity(intent);
+//            }
+//
+//        });
+//        login = (Button) findViewById(R.id.loginButton);
+//        login.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(FirstScreen.this, Rides.class);
+//                FirstScreen.this.startActivity(intent);
+//            }
+//
+//        });
+//        login.setBackgroundColor(0xFF0099CC);
+//
+//        googsignin = (Button) findViewById(R.id.gSignIn);
+//        googsignin.setBackgroundColor(0xFF0CC0FF);
+//        googsignin.setTextColor(Color.BLACK);
+//        googsignin.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(FirstScreen.this, SignInActivity.class);
+//                FirstScreen.this.startActivity(intent);
+//            }
+//
+//        });
+//        signup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 }

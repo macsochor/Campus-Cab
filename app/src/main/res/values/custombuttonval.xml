@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="custombuttonval" parent="@android:style/Widget.Button">
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:color">#AF00AF</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:text">Delete</item>
+    </style>
+</resources>

@@ -5,7 +5,7 @@
     android:text="Delete"
     android:textSize="12dp"
     android:fontFamily="sans-serif-thin"
-    android:background="#FF0000"
+    android:background="#FF5295"
     android:layout_margin="0dp"
     >
 
