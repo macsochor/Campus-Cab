@@ -14,7 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:textColor="#000"
-
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:textSize="20dp"
             android:text="Show requests for" />
 
@@ -44,6 +45,37 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:textColor="#000"
+            android:text="\nLeaving from"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFA500"
+            android:id="@+id/leavingFromTV"
+            android:maxLines="1"
+            android:hint="Any"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#000"
+            android:text="\nGoing To"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/goingToTV"
+            android:maxLines="1"
+            android:textColor="#FFA500"
+            android:gravity="center_horizontal"
+            android:hint="Any"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#000"
             android:text="\nStart Time"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -67,50 +99,20 @@
             android:textColor="#000"
             android:id="@+id/textView4" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/filterDateEndTV"
-            android:focusable="false"
-            android:textColor="#FFA500"
-            android:hint="Any"/>
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/filterDateEndTV"
+                android:focusable="false"
+                android:textColor="#FFA500"
+                android:hint="Any"/>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#000"
-            android:text="\nLeaving from"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFA500"
-            android:id="@+id/leavingFromTV"
-            android:singleLine="true"
-            android:hint="Any"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textColor="#000"
-            android:text="\nLeaving from"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/goingToTV"
-            android:singleLine="true"
-            android:textColor="#FFA500"
-            android:gravity="center_horizontal"
-            android:hint="Any"/>
-
     </LinearLayout>
+
 </ScrollView>

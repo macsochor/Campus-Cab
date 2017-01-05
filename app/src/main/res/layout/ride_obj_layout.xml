@@ -3,6 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="100dp">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:textSize="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/ageTV"
+        android:id="@+id/del_button"
+        android:fontFamily="sans-serif-thin"
+        android:background="#FF5295"
+        android:layout_margin="0dp" />
+
     <TextView
         android:text="Just Now"
         android:layout_width="wrap_content"

@@ -20,9 +20,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.method.KeyListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -59,6 +62,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -68,6 +72,7 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private LinearLayout ll;
+    private EditText leavingfromtv, goingtotv;
     private TextView tv1, tv2;
     private int height, width;
     static int id = 1;
@@ -101,12 +106,17 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
 
-//        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 //        mRecyclerView.setHasFixedSize(true);
-//        mLayoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mAdapter = new MyAdapter(myData,mPostReference);
-//        mRecyclerView.setAdapter(mAdapter);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        ArrayList<Ride> a = new ArrayList<Ride>();
+        Ride r = new Ride("origin", "dest", "today", "tomorrow", "mac", 3, false, "123456");
+        a.add(r);
+
+        mAdapter = new MyAdapter(a);
+        mRecyclerView.setAdapter(mAdapter);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -194,12 +204,15 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                             }
                         };
 
-                        new DatePickerDialog(Rides.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen, date, cal
+                        new DatePickerDialog(Rides.this, date, cal
                                 .get(Calendar.YEAR), cal.get(Calendar.MONTH),
                                 cal.get(Calendar.DAY_OF_MONTH)).show();
 
                     }
                 });
+
+                leavingfromtv = (EditText)findViewById(R.id.leavingFromTV);
+                goingtotv = (EditText)findViewById(R.id.goingToTV);
 
                 final EditText dateEnd = (EditText)filterLL.findViewById(R.id.filterDateEndTV);
                 dateEnd.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +250,6 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                         new DatePickerDialog(Rides.this, date, cal
                                 .get(Calendar.YEAR), cal.get(Calendar.MONTH),
                                 cal.get(Calendar.DAY_OF_MONTH)).show();
-
                     }
                 });
                 //textview.setText(R.string.large_text);
@@ -260,18 +272,10 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                         });
 
                 alertDialog.setTitle("Filter Rides");
-                //alertDialog.setMessage("Here is a really long message.");
                 alertDialog.setView(filterLL);
-//                alertDialog.setButton("OK", null);
                 AlertDialog alert = alertDialog.create();
 
                 alert.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                WindowManager.LayoutParams wmlp = alert.getWindow().getAttributes();
-//                wmlp.height=WindowManager.LayoutParams.MATCH_PARENT;
-//                wmlp.gravity = Gravity.LEFT;
-//                //wmlp.x = 100;   //x position
-//                wmlp.y = 0;   //y position
-//                alert.getWindow().setAttributes(wmlp);
                 alert.show();
             }
         });
@@ -283,6 +287,7 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(Rides.this);
+                builder1.setTitle("Ride Request Form");
                 builder1.setMessage("I am...");
                 builder1.setCancelable(true);
 
@@ -358,152 +363,6 @@ public class Rides extends AppCompatActivity implements GoogleApiClient.OnConnec
                     else if(minutes > 0) age += minutes + "m";
                     else age = "just now";
                     ageTV.setText(age);
-
-//                    TextView originTV = new TextView(Rides.this);
-//                    originTV.setText(post.origin + "\nTo\n" + post.destination);
-//
-//                    TextView destTV = new TextView(Rides.this);
-//                    destTV.setText("To\n"+post.destination);
-//
-//                    TextView arrowTV = new TextView(Rides.this);
-//                    arrowTV.setText(post.date + "\n" + post.time);
-//
-//                    TextView dateTV = new TextView(Rides.this);
-//                    dateTV.setText(post.date);
-//
-//                    TextView timeTV = new TextView(Rides.this);
-//                    timeTV.setText(post.time);
-//
-//                    TextView seatsTV = new TextView(Rides.this);
-//                    seatsTV.setText(String.valueOf(post.seats + "\n"));
-//
-//                    ImageView isPassTV = new ImageView(Rides.this);
-//                    Drawable d;
-//                    if(post.isPassenger) {
-//                        d = getResources().getDrawable(R.drawable.manclip);
-//                    } else {
-//                        d = getResources().getDrawable(R.drawable.carclip);
-//                    }
-//
-//                    isPassTV.setImageDrawable(d);
-//                    LinearLayout.LayoutParams layoutSizeParams = new LinearLayout.LayoutParams(300, 275);
-//
-//                    isPassTV.setLayoutParams(layoutSizeParams);
-//
-//                    TextView timeDiffTV = new TextView(Rides.this);
-//                    Calendar c = Calendar.getInstance();
-//                    long diff = c.getTimeInMillis() - Long.valueOf(post.timeCreated);
-//                    long seconds = diff / 1000;
-//                    long minutes = seconds / 60;
-//                    long hours = minutes / 60;
-//                    long days = hours / 24;
-//                    String age = "";
-//                    if(days > 0){
-//                        age += days + "d";
-//                    } else if(hours > 0){
-//                        age += hours + "h";
-//                    } else if(minutes > 0){
-//                        age += minutes + "m";
-//                    } else {
-//                        age += "just now";
-//                    }
-//                    timeDiffTV.setText(age);
-//
-//                    final Button deleteButton = (Button) getLayoutInflater().inflate(R.layout.custombutton, null);
-//                    //deleteButton.setText("Hello world");
-//                    //final Button deleteButton = new Button(Rides.this);
-//                    deleteButton.setText("Delete");
-//                    deleteButton.setLayoutParams(new LinearLayout.LayoutParams(200, 120));
-//
-//                    deleteButton.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            AlertDialog.Builder builder1 = new AlertDialog.Builder(Rides.this);
-//                            builder1.setMessage("Are you sure you want to delete this ride?");
-//                            builder1.setCancelable(true);
-//
-//                            builder1.setPositiveButton(
-//                                    "Cancel",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int id) {
-//                                            dialog.cancel();
-//
-//                                        }
-//                                    });
-//
-//                            builder1.setNegativeButton(
-//                                    "Delete",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int id) {
-//                                            String s = postSnapshot.getRef().toString();
-//                                            //s = s.substring(s.indexOf("/-"),s.length());
-//                                            deletePost(s);
-//                                        }
-//                                    });
-//
-//                            AlertDialog alert11 = builder1.create();
-//                            alert11.show();
-//                        }
-//                    });
-//
-//                    RelativeLayout rellay = new RelativeLayout(Rides.this);
-//                    TextView tv = new TextView(Rides.this);
-//
-//                    RelativeLayout.LayoutParams rlparams = new RelativeLayout.LayoutParams(width/5, height/20);
-//                    rlparams.setMargins(0,0,0,0);
-//                    rlparams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//                    //rellay.addView(timeDiffTV, rlparams);
-//                    rellay.addView(deleteButton, rlparams);
-//                    RelativeLayout.LayoutParams timeparams = new RelativeLayout.LayoutParams(width/10, height/20);
-//                    //timeparams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//                    deleteButton.setId(id++);
-//                    timeparams.addRule(RelativeLayout.BELOW, id-1);
-//                    timeparams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, id-1);
-//                    rellay.addView(timeDiffTV, timeparams);
-//
-//
-//                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-//                            width/4, height/10, 1.0f);
-//                    param.gravity = Gravity.CENTER_HORIZONTAL;
-//
-//                    originTV.setTextSize(15);
-//                    destTV.setTextSize(15);
-//                    arrowTV.setTextSize(15);
-//                    dateTV.setTextSize(15);
-//                    timeTV.setTextSize(15);
-//                    seatsTV.setTextSize(15);
-//                    timeDiffTV.setTextSize(10);
-//
-//                    timeDiffTV.setTextColor(Color.GRAY);
-//
-//
-//                    destTV.setLayoutParams(param);
-//                    originTV.setLayoutParams(param);
-//                    arrowTV.setLayoutParams(param);
-//                    dateTV.setLayoutParams(param);
-//                    timeTV.setLayoutParams(param);
-//                    seatsTV.setLayoutParams(param);
-//                    rellay.setLayoutParams(param);
-//
-//                    LinearLayout linloOriginDest = new LinearLayout(Rides.this);
-//                    linloOriginDest.setWeightSum(5);
-//                    linloOriginDest.setOrientation(LinearLayout.HORIZONTAL);
-//                    linloOriginDest.addView(isPassTV);
-//                    linloOriginDest.addView(originTV);
-//                    //linloOriginDest.addView(destTV);
-//                    linloOriginDest.addView(arrowTV);
-//                    linloOriginDest.addView(rellay);
-////                    linloOriginDest.addView(timeDiffTV);
-//                    ll.addView(linloOriginDest);
-//
-//                    LinearLayout linloDateTime = new LinearLayout(Rides.this);
-//                    linloDateTime.setWeightSum(4);
-//                    linloDateTime.setOrientation(LinearLayout.HORIZONTAL);
-//                    linloDateTime.addView(dateTV);
-//                    linloDateTime.addView(timeTV);
-////                    linloDateTime.addView(isPassTV);
-////                    linloDateTime.addView(deleteButton);
-////                    ll.addView(linloDateTime);
                 }
             }
 
